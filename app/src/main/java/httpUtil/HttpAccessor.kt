@@ -5,23 +5,34 @@ import android.util.Log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
-import response.ResponseJSON
-import url.URL
+import response.ResponseContentJSON
+import url.Path
 import java.lang.Exception
 
 class HttpAccessor() {
-    private val ENDPOINT =
-        URL.CONTEXT_PATH.value + "format=json&action=query&prop=info&titles=%E3%82%A8%E3%83%9E%E3%83%BB%E3%83%AF%E3%83%88%E3%82%BD%E3%83%B3"
 
-    fun getRequest(): ResponseJSON {
+    fun getRequest(): ResponseContentJSON {
+//        FuelManager.instance.basePath = Path.CONTEXT_PATH_MOCK.value
+
         Log.d(TAG, "getRequest: start")
+        // パラメータ
+        val params = listOf(
+            "format" to "json",
+            "action" to "query",
+            "prop" to "revisions",
+            "rvprop" to "content",
+            "titles" to "%E3%82%A8%E3%83%9E%E3%83%BB%E3%83%AF%E3%83%88%E3%82%BD%E3%83%B3"
+        )
 
         try {
-            var (_, _, result) = ENDPOINT.httpGet().responseJson()
+            var (request, _, result) = Fuel.get(Path.CONTEXT_PATH_MOCK.value, params).responseJson()
+            println(request)
             return when (result) {
                 is Result.Failure -> {
                     Log.w(TAG, "request: failed")
@@ -46,9 +57,9 @@ class HttpAccessor() {
         }
     }
 
-    private fun mapJsonObject(data: String, json: JSONObject): ResponseJSON {
+    private fun mapJsonObject(data: String, json: JSONObject): ResponseContentJSON {
         // mapperオブジェクトを作成
         val mapper = ObjectMapper().registerKotlinModule()
-        return mapper.readValue<ResponseJSON>(data)
+        return mapper.readValue<ResponseContentJSON>(data)
     }
 }

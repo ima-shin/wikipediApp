@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * レスポンスデータクラス
  *
  */
-data class ResponseJSON(
+data class ResponseInfoJSON(
     @JsonProperty("batchcomplete") val batchComplete: String,
     @JsonProperty("query") val query: QueryContent
 )
