@@ -17,14 +17,12 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             var response = sendRequest()
-//            var title = response.get
         }
 
         Thread.sleep(3000)
     }
 
     private fun sendRequest() {
-        val http = HttpAccessor()
-        http.getRequest()
+        val resposne = HttpAccessor().getRequest()
     }
 }
