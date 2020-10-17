@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WikipediaApp</string>
+    <string name="placeholder_seach">検索</string>
 </resources>
