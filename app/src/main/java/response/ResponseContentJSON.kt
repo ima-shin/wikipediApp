@@ -1,5 +1,6 @@
 package response
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -18,6 +19,7 @@ data class Main (
 )
 
 data class Pages (
+    @JsonIgnore @JsonProperty("normalized") val normalized: List<Map<String, String>>,
     @JsonProperty("pages") val pages: Map<String, PageInfo>
 )
 

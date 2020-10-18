@@ -9,9 +9,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
+import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
+import kotlinx.coroutines.CoroutineScope
 import org.json.JSONObject
 import response.ResponseContentJSON
 import url.Path
@@ -20,8 +22,7 @@ import java.net.URLEncoder
 
 class HttpAccessor() {
 
-    private val keyword = "エマ・ワトソン"
-    fun getRequest(): ResponseContentJSON {
+    fun getRequest(keyword: String): ResponseContentJSON {
 //        FuelManager.instance.basePath = Path.CONTEXT_PATH_MOCK.value
 
         Log.d(TAG, "getRequest: start")
@@ -31,11 +32,12 @@ class HttpAccessor() {
             "action" to "query",
             "prop" to "revisions",
             "rvprop" to "content",
-            "titles" to "エマ・ワトソン"
+            "titles" to URLEncoder.encode(keyword, "UTF-8")
         )
 
         try {
-            var (request, response, result) = Fuel.get(Path.CONTEXT_PATH_MOCK.value, params).responseJson()
+
+            var (request, response, result) = Fuel.get(Path.CONTEXT_PATH.value, params).responseJson()
             Log.d(TAG, "request: $request.toString()")
             return when (result) {
                 is Result.Failure -> {
@@ -48,8 +50,9 @@ class HttpAccessor() {
                 is Result.Success -> {
                     Log.d(TAG, "request: success")
                     // FuelJsonクラスをResponseContentJsonクラスにマッピングする
-                    val res = mapJsonObject(result.value.content)
-//                    Log.d(TAG, "response: $res")
+                    Log.d(TAG, "response: ${result.value.content}")
+                    val mapper = ObjectMapper().registerKotlinModule()
+                    val res: ResponseContentJSON = mapper.readValue(result.value.content)
                     Log.d(TAG, "getRequest: end")
                     res
                 }
@@ -60,9 +63,4 @@ class HttpAccessor() {
         }
     }
 
-    private fun mapJsonObject(data: String): ResponseContentJSON {
-        // mapperオブジェクトを作成
-        val mapper = ObjectMapper().registerKotlinModule()
-        return mapper.readValue(data)
-    }
 }

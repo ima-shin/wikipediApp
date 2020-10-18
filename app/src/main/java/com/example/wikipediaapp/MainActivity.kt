@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import httpUtil.HttpAccessor
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import response.ResponseContentJSON
 
@@ -21,26 +18,32 @@ class MainActivity : AppCompatActivity() {
 
 
         request_btn.setOnClickListener {
-            GlobalScope.launch {
-                var response = sendRequest()
-                // 値を取り出す
-                response.query.pages.values.last().title?.let {
-                    title = it
-                    print("content: $it")
+            when (val keyword = editSearchKeywordInput.text.toString()) {
+                "" -> { return@setOnClickListener }
+                else -> {
+                    // ボタンの無効化
+                    request_btn.isClickable = false
+                    // リクエストを送ってviewを更新する
+                    runBlocking {
+                        setContents(keyword)
+                    }
+                    request_btn.isClickable = true
                 }
-
-                print("endend")
             }
         }
-        wiki_title.text = "END"
-        Thread.sleep(3000)
     }
 
-    private fun sendRequest(): ResponseContentJSON {
-        return HttpAccessor().getRequest()
-    }
+    private suspend fun setContents(keyword: String)  {
+        // 通信処理
+        var response = CoroutineScope(Dispatchers.Default).async { HttpAccessor().getRequest(keyword) }.await()
 
-    private fun setTitleTextOnLabel(title: String?) = runBlocking {
-        
+        // タイトルのセット
+        response.query.pages.values.last().title?.let {
+            wiki_title.text = it
+        }
+        // 本文のセット
+        response.query.pages.values.last().revisions?.last()?.content?.let {
+            contentTextView.text = it
+        }
     }
 }
