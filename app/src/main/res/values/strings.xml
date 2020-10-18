@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">WikipediaApp</string>
+    <string name="placeholder_seach">検索</string>
+    <string name="DefaultTitle">タイトル</string>
+    <string name="SearchBtnText">検索</string>
+</resources>
