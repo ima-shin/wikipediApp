@@ -36,11 +36,10 @@ class HttpAccessor() {
 
         try {
             var (request, response, result) = Fuel.get(Path.CONTEXT_PATH_MOCK.value, params).responseJson()
-            println(request)
+            Log.d(TAG, "request: $request.toString()")
             return when (result) {
                 is Result.Failure -> {
                     Log.w(TAG, "request: failed, statusCode: " + response.statusCode)
-                    println(response.statusCode)
                     Log.d(TAG, result.getException().toString())
                     Log.d(TAG, "getRequest: end")
 

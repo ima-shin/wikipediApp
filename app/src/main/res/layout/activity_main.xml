@@ -29,11 +29,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <WebView
-        android:layout_width="409dp"
-        android:layout_height="668dp"
-        android:layout_marginTop="10dp"
+    <TextView
+        android:id="@+id/wiki_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="89dp"
+        android:layout_marginEnd="179dp"
+        android:layout_marginBottom="389dp"
+        android:text="Default"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/request_btn" />
+
+    <Button
+        android:id="@+id/request_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="122dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="89dp"
+        android:text="Request"
+        app:layout_constraintBottom_toTopOf="@+id/wiki_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSearchKeywordInput" />
