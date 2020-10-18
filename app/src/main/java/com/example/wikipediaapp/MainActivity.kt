@@ -9,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
+import response.ResponseContentJSON
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,14 +18,15 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             var response = sendRequest()
-//            var title = response.get
+            // 値を取り出す
+            println(response.query.pages.values.last().revisions?.last()?.content)
         }
 
         Thread.sleep(3000)
     }
 
-    private fun sendRequest() {
-        val http = HttpAccessor()
-        http.getRequest()
+    private fun sendRequest(): ResponseContentJSON {
+        val resposne = HttpAccessor().getRequest()
+        return HttpAccessor().getRequest()
     }
 }
