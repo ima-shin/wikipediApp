@@ -2,6 +2,9 @@ package response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * レスポンスモデル
+ */
 data class ResponseContentJSON (
     @JsonProperty("batchcomplete") val batchComplete: String,
     @JsonProperty("warnings") val warnings: Main,
@@ -21,12 +24,12 @@ data class Pages (
 data class PageInfo (
     @JsonProperty("pageid") val pageId: Int,
     @JsonProperty("ns") val ns: Int,
-    @JsonProperty("title") val title: String,
-    @JsonProperty("revisions") val revisions: Revisions
+    @JsonProperty("title") val title: String?,
+    @JsonProperty("revisions") val revisions: List<Revisions>?
 )
 
 data class Revisions (
-    @JsonProperty("contentformat") val contentFormat: String,
-    @JsonProperty("contentmodel") val contentModel: String,
-    @JsonProperty("*") val content: String
+    @JsonProperty("contentformat") val contentFormat: String?,
+    @JsonProperty("contentmodel") val contentModel: String?,
+    @JsonProperty("*") val content: String?
 )
